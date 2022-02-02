@@ -11,6 +11,7 @@ function app(people){
   let searchType = promptFor("Enter the attribute you would like to search by (name, eye color, height, weight, gender, occupation, relatives, DOB): ").toLowerCase();
   let searchResults;
   let person;
+  let personIndex;
   switch(searchType){
     case 'name':
       searchResults = searchByName(people);
@@ -20,12 +21,39 @@ function app(people){
     case 'eye color':
       searchResults = searchByEyeColor(people);
       displayPeople(searchResults);
-      // let userInput = promptFor("Enter a number to view further details: ");
-      // let userNum = parseInt(userInput);
-      // let personIndex = userNum - 1;
-      let personIndex = promptFor("Enter a number to view further details: ") - 1;
+      personIndex = promptFor("Enter a number to view further details: ") - 1;
       person = searchResults[personIndex]
       break;
+    case 'height':
+      searchResults = searchByHeight(people);
+      displayPeople(searchResults);
+      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      person = searchResults[personIndex]
+      break;
+    case 'weight':
+      searchResults = searchByWeight(people);
+      displayPeople(searchResults);
+      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      person = searchResults[personIndex]
+      break;
+    case 'dob':
+      searchResults = searchByDob(people);
+      displayPeople(searchResults);
+      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      person = searchResults[personIndex]
+      break;
+    case 'occupation':
+      searchResults = searchByOccupation(people);
+      displayPeople(searchResults);
+      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      person = searchResults[personIndex]
+      break;
+    case 'gender':
+      searchResults = searchByGender(people);
+      displayPeople(searchResults);
+      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      person = searchResults[personIndex]
+      break;  
       default:
     app(people); // restart app
       break;
@@ -99,6 +127,51 @@ function searchByEyeColor(people){
 
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.eyeColor === eyeColor;
+  })
+  return foundPeople;
+}
+
+function searchByHeight(people){
+  let height = promptFor("Enter height for search: ", autoValid);
+
+  let foundPeople = people.filter(function(potentialMatch){
+    return potentialMatch.height == height;
+  })
+  return foundPeople;
+}
+
+function searchByGender(people){
+  let gender = promptFor("Enter gender for search: ", autoValid);
+
+  let foundPeople = people.filter(function(potentialMatch){
+    return potentialMatch.gender === gender;
+  })
+  return foundPeople;
+}
+
+function searchByDob(people){
+  let dob = promptFor("Enter date of birth for search(m/d/yyyy): ", autoValid);
+
+  let foundPeople = people.filter(function(potentialMatch){
+    return potentialMatch.dob == dob;
+  })
+  return foundPeople;
+}
+
+function searchByWeight(people){
+  let weight = promptFor("Enter weight for search: ", autoValid);
+
+  let foundPeople = people.filter(function(potentialMatch){
+    return potentialMatch.weight == weight;
+  })
+  return foundPeople;
+}
+
+function searchByOccupation(people){
+  let occupation = promptFor("Enter occupation for search: ", autoValid);
+
+  let foundPeople = people.filter(function(potentialMatch){
+    return potentialMatch.occupation === occupation;
   })
   return foundPeople;
 }
