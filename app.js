@@ -8,7 +8,7 @@
 
 // app is the function called to start the entire application
 function app(people){
-  let searchType = promptFor("Enter the attribute you would like to search by (name, eye color, height, weight, gender, occupation, relatives, DOB): ").toLowerCase();
+  let searchType = promptFor("Enter the attribute you would like to search by (name, eye color, height, weight, gender, occupation, relatives, DOB): ", validText).toLowerCase();
   let searchResults;
   let person;
   let personIndex;
@@ -21,43 +21,43 @@ function app(people){
     case 'eye color':
       searchResults = searchByEyeColor(people);
       displayPeople(searchResults);
-      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
       person = searchResults[personIndex]
       break;
     case 'height':
       searchResults = searchByHeight(people);
       displayPeople(searchResults);
-      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
       person = searchResults[personIndex]
       break;
     case 'weight':
       searchResults = searchByWeight(people);
       displayPeople(searchResults);
-      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
       person = searchResults[personIndex]
       break;
     case 'dob':
       searchResults = searchByDob(people);
       displayPeople(searchResults);
-      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
       person = searchResults[personIndex]
       break;
     case 'occupation':
       searchResults = searchByOccupation(people);
       displayPeople(searchResults);
-      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
       person = searchResults[personIndex]
       break;
     case 'gender':
       searchResults = searchByGender(people);
       displayPeople(searchResults);
-      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
       person = searchResults[personIndex]
       break;
     case 'relative':
       searchResults = searchByRelative(people);
       displayPeople(searchResults);
-      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
       person = searchResults[personIndex]
       break;
       default:
@@ -80,7 +80,7 @@ function mainMenu(person, people){
     return app(people); // restart
   }
   
-  let displayOption = promptFor("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", autoValid);
+  let displayOption = promptFor("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", validText);
 
   switch(displayOption){
     case "info":
@@ -111,8 +111,8 @@ function mainMenu(person, people){
 
 //nearly finished function used to search through an array of people to find matching first and last name and return a SINGLE person object.
 function searchByName(people){
-  let firstName = promptFor("What is the person's first name?", autoValid);
-  let lastName = promptFor("What is the person's last name?", autoValid);
+  let firstName = promptFor("What is the person's first name?", validText);
+  let lastName = promptFor("What is the person's last name?", validText);
 
   let foundPerson = people.filter(function(potentialMatch){
     if(potentialMatch.firstName === firstName && potentialMatch.lastName === lastName){
@@ -129,7 +129,7 @@ function searchByName(people){
 
 //unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
 function searchByEyeColor(people){
-  let eyeColor = promptFor("Enter eye color for search: ", autoValid);
+  let eyeColor = promptFor("Enter eye color for search: ", validText);
 
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.eyeColor === eyeColor;
@@ -138,7 +138,7 @@ function searchByEyeColor(people){
 }
 
 function searchByHeight(people){
-  let height = promptFor("Enter height for search: ", autoValid);
+  let height = promptFor("Enter height for search: ", validNum);
 
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.height == height;
@@ -147,7 +147,7 @@ function searchByHeight(people){
 }
 
 function searchByGender(people){
-  let gender = promptFor("Enter gender for search: ", autoValid);
+  let gender = promptFor("Enter gender for search: ", validGender);
 
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.gender === gender;
@@ -156,7 +156,7 @@ function searchByGender(people){
 }
 
 function searchByDob(people){
-  let dob = promptFor("Enter date of birth for search(m/d/yyyy): ", autoValid);
+  let dob = promptFor("Enter date of birth for search (mm/dd/yyyy): ", validDate);
 
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.dob == dob;
@@ -165,7 +165,7 @@ function searchByDob(people){
 }
 
 function searchByWeight(people){
-  let weight = promptFor("Enter weight for search: ", autoValid);
+  let weight = promptFor("Enter weight for search: ", validNum);
 
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.weight == weight;
@@ -174,7 +174,7 @@ function searchByWeight(people){
 }
 
 function searchByOccupation(people){
-  let occupation = promptFor("Enter occupation for search: ", autoValid);
+  let occupation = promptFor("Enter occupation for search: ", validText);
 
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.occupation === occupation;
@@ -183,8 +183,8 @@ function searchByOccupation(people){
 }
 
 function searchByRelative(people){
-  let relativeFirstName = promptFor("Enter first name of relative for search: ", autoValid);
-  let relativeLastName = promptFor("Enter Last name of relative for search: ", autoValid);
+  let relativeFirstName = promptFor("Enter first name of relative for search: ", validText);
+  let relativeLastName = promptFor("Enter Last name of relative for search: ", validText);
   let foundRelative = people.filter(function(potentialMatch){
     return potentialMatch.firstName === relativeFirstName && potentialMatch.lastName === relativeLastName;
   })
@@ -194,7 +194,6 @@ function searchByRelative(people){
   return foundPeople;
 }
 
-//TODO: add other trait filter functions here.
 
 
 
@@ -236,11 +235,11 @@ function displayPerson(person){
 //response: Will capture the user input.
 //isValid: Will capture the return of the validation function callback. true(the user input is valid)/false(the user input was not valid).
 //this function will continue to loop until the user enters something that is not an empty string("") or is considered valid based off the callback function(valid).
-function promptFor(question){
+function promptFor(question, validator){
   let isValid;
   do{
     var response = prompt(question).trim();
-    isValid = autoValid(response);
+    isValid = validator(response);
   } while(response === ""  ||  isValid === false)
   return response;
 }
@@ -254,6 +253,48 @@ function yesNo(input){
     return false;
   }
 }
+
+function validNum(input){
+  if(isNaN(input)){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+
+function validGender(input){
+  if(input.toLowerCase() == "female" || input.toLowerCase() == "male"){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+function validText(input){
+  if(input.length >= 1){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+function validDate(input){
+  let date = Date.parse(input);
+  if(isNaN(date)){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+
+
+
+
+
 
 // helper function to pass in as default promptFor validation.
 //this will always return true for all inputs.
