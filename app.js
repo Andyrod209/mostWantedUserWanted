@@ -8,14 +8,23 @@
 
 // app is the function called to start the entire application
 function app(people){
-  let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
+  let searchType = promptFor("Enter the attribute you would like to search by (name, eye color, height, weight, gender, occupation, relatives, DOB): ").toLowerCase();
   let searchResults;
+  let person;
   switch(searchType){
-    case 'yes':
+    case 'name':
       searchResults = searchByName(people);
+      displayPerson(searchResults);
+      person = searchResults;
       break;
-    case 'no':
-      // TODO: search by traits
+    case 'eye color':
+      searchResults = searchByEyeColor(people);
+      displayPeople(searchResults);
+      // let userInput = promptFor("Enter a number to view further details: ");
+      // let userNum = parseInt(userInput);
+      // let personIndex = userNum - 1;
+      let personIndex = promptFor("Enter a number to view further details: ") - 1;
+      person = searchResults[personIndex]
       break;
       default:
     app(people); // restart app
@@ -24,7 +33,7 @@ function app(people){
   
   // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
   
-  mainMenu(searchResults, people);
+  mainMenu(person, people);
 }
 
 // Menu function to call once you find who you are looking for
@@ -54,8 +63,6 @@ function mainMenu(person, people){
     break;
     case "quit":
     return; // stop execution
-    case "no":
-      displayPerson(person)
     default:
     return mainMenu(person, people); // ask again
   }
@@ -88,7 +95,12 @@ function searchByName(people){
 
 //unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
 function searchByEyeColor(people){
+  let eyeColor = promptFor("Enter eye color for search: ", autoValid);
 
+  let foundPeople = people.filter(function(potentialMatch){
+    return potentialMatch.eyeColor === eyeColor;
+  })
+  return foundPeople;
 }
 
 //TODO: add other trait filter functions here.
@@ -104,8 +116,10 @@ function searchByEyeColor(people){
 
 // alerts a list of people
 function displayPeople(people){
+  let n = 0;
   alert(people.map(function(person){
-    return person.firstName + " " + person.lastName;
+    n ++;
+    return n + ". " + person.firstName + " " + person.lastName;
   }).join("\n"));
 }
 
@@ -131,11 +145,11 @@ function displayPerson(person){
 //response: Will capture the user input.
 //isValid: Will capture the return of the validation function callback. true(the user input is valid)/false(the user input was not valid).
 //this function will continue to loop until the user enters something that is not an empty string("") or is considered valid based off the callback function(valid).
-function promptFor(question, valid){
+function promptFor(question){
   let isValid;
   do{
     var response = prompt(question).trim();
-    isValid = valid(response);
+    isValid = autoValid(response);
   } while(response === ""  ||  isValid === false)
   return response;
 }
