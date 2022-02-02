@@ -15,7 +15,6 @@ function app(people){
   switch(searchType){
     case 'name':
       searchResults = searchByName(people);
-      displayPerson(searchResults);
       person = searchResults;
       break;
     case 'eye color':
@@ -119,13 +118,13 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
-    // TODO: get person's info
+      displayPerson(person);
     break;
     case "family":
     // TODO: get person's family
     break;
     case "descendants":
-    // TODO: get person's descendants
+      displayDescendents(person, people);
     break;
     case "restart":
     app(people); // restart
@@ -253,9 +252,44 @@ function displayPerson(person){
   // height, weight, age, name, occupation, eye color.
   let personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
-  // TODO: finish getting the rest of the information to display.
+  personInfo += "DOB: " + person.dob + "\n";
+  personInfo += "Gender: " + person.gender + "\n";
+  personInfo += "Occupation: " + person.occupation + "\n";
+  personInfo += "Height: " + person.height + "\n";
+  personInfo += "Weight: " + person.weight + "\n";
+  personInfo += "Eye Color: " + person.eyeColor + "\n";
+
   alert(personInfo);
 }
+
+
+function findChildren(person, people){
+  let foundChildren = people.filter(function(potentialMatch){
+    return potentialMatch.parents.includes(person.id);
+  })
+  return foundChildren;
+}
+
+function findDescendants(person, people){
+  let foundDescendants = findChildren(person, people);
+  let foundGrandChildren = foundDescendants.map(function(child){
+    let foundKids = findChildren(child, people);
+      let foundKid = foundKids.map(function(kid){
+        foundDescendants.push(kid);
+      })
+  })
+  return foundDescendants;
+}
+
+function displayDescendents(person, people){
+  let foundChildren = findDescendants(person, people);
+  let foundChildrenNames = foundChildren.map(function(child){
+    return child.firstName + " " + child.lastName;
+  }).join("\n");
+  alert(person.firstName + " " + person.lastName + "'s Descendants: \n" + foundChildrenNames);
+}
+
+
 
 //#endregion
 
