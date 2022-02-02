@@ -22,43 +22,78 @@ function app(people){
       searchResults = searchByEyeColor(people);
       displayPeople(searchResults);
       personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
-      person = searchResults[personIndex]
+      if(personIndex == searchResults.length){
+        app(searchResults);
+      }
+      else{
+        person = searchResults[personIndex]
+      }
       break;
     case 'height':
       searchResults = searchByHeight(people);
       displayPeople(searchResults);
       personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
-      person = searchResults[personIndex]
+      if(personIndex == searchResults.length){
+        app(searchResults);
+      }
+      else{
+        person = searchResults[personIndex]
+      }
       break;
     case 'weight':
       searchResults = searchByWeight(people);
       displayPeople(searchResults);
       personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
-      person = searchResults[personIndex]
+      if(personIndex == searchResults.length){
+        app(searchResults);
+      }
+      else{
+        person = searchResults[personIndex]
+      }
       break;
     case 'dob':
       searchResults = searchByDob(people);
       displayPeople(searchResults);
       personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
-      person = searchResults[personIndex]
+      if(personIndex == searchResults.length){
+        app(searchResults);
+      }
+      else{
+        person = searchResults[personIndex]
+      }
       break;
     case 'occupation':
       searchResults = searchByOccupation(people);
       displayPeople(searchResults);
       personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
-      person = searchResults[personIndex]
+      if(personIndex == searchResults.length){
+        app(searchResults);
+      }
+      else{
+        person = searchResults[personIndex]
+      }
       break;
     case 'gender':
       searchResults = searchByGender(people);
       displayPeople(searchResults);
       personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
-      person = searchResults[personIndex]
+      if(personIndex == searchResults.length){
+        app(searchResults);
+      }
+      else{
+        person = searchResults[personIndex]
+      }
       break;
     case 'relative':
       searchResults = searchByRelative(people);
       displayPeople(searchResults);
       personIndex = promptFor("Enter a number to view further details: ", validNum) - 1;
-      person = searchResults[personIndex]
+      if(personIndex == searchResults.length){
+        app(searchResults);
+      }
+      else{
+        person = searchResults[personIndex]
+      }
       break;
       default:
     app(people); // restart app
@@ -210,7 +245,7 @@ function displayPeople(people){
   alert(people.map(function(person){
     n ++;
     return n + ". " + person.firstName + " " + person.lastName;
-  }).join("\n"));
+  }).join("\n")+"\n" + (n + 1) + ". Filter this list by addition trait");
 }
 
 function displayPerson(person){
