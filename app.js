@@ -23,6 +23,7 @@ function app(people){
   }
   
   // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
+  
   mainMenu(searchResults, people);
 }
 
@@ -35,7 +36,7 @@ function mainMenu(person, people){
     alert("Could not find that individual.");
     return app(people); // restart
   }
-
+  
   let displayOption = promptFor("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", autoValid);
 
   switch(displayOption){
@@ -53,6 +54,8 @@ function mainMenu(person, people){
     break;
     case "quit":
     return; // stop execution
+    case "no":
+      displayPerson(person)
     default:
     return mainMenu(person, people); // ask again
   }
@@ -78,8 +81,9 @@ function searchByName(people){
       return false;
     }
   })
+
   // TODO: find the person single person object using the name they entered.
-  return foundPerson;
+  return foundPerson[0];
 }
 
 //unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
