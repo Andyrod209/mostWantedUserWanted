@@ -53,7 +53,13 @@ function app(people){
       displayPeople(searchResults);
       personIndex = promptFor("Enter a number to view further details: ") - 1;
       person = searchResults[personIndex]
-      break;  
+      break;
+    case 'relative':
+      searchResults = searchByRelative(people);
+      displayPeople(searchResults);
+      personIndex = promptFor("Enter a number to view further details: ") - 1;
+      person = searchResults[personIndex]
+      break;
       default:
     app(people); // restart app
       break;
@@ -172,6 +178,18 @@ function searchByOccupation(people){
 
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.occupation === occupation;
+  })
+  return foundPeople;
+}
+
+function searchByRelative(people){
+  let relativeFirstName = promptFor("Enter first name of relative for search: ", autoValid);
+  let relativeLastName = promptFor("Enter Last name of relative for search: ", autoValid);
+  let foundRelative = people.filter(function(potentialMatch){
+    return potentialMatch.firstName === relativeFirstName && potentialMatch.lastName === relativeLastName;
+  })
+  let foundPeople = people.filter(function(potentialMatch){
+    return potentialMatch.currentSpouse == foundRelative.id || potentialMatch.parents.includes(foundRelative.id);
   })
   return foundPeople;
 }
