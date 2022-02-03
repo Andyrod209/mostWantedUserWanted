@@ -121,6 +121,7 @@ function mainMenu(person, people){
       displayPerson(person);
     break;
     case "family":
+      displayFamily(person, people);
     // TODO: get person's family
     break;
     case "descendants":
@@ -262,12 +263,48 @@ function displayPerson(person){
   alert(personInfo);
 }
 
+function findSpouse(person, people){
+  let spouse = people.filter(function(individual){
+    return person.currentSpouse == individual.id;
+  })
+  return spouse;
+}
 
 function findChildren(person, people){
   let foundChildren = people.filter(function(potentialMatch){
     return potentialMatch.parents.includes(person.id);
   })
   return foundChildren;
+}
+
+function findGrandchildren(children, people){
+  let grandChildren = [];
+  let foundGrandChildren = children.map(function(child){
+    let foundKids = findChildren(child, people);
+      let foundKid = foundKids.map(function(kid){
+        grandChildren.push(kid);
+      })
+  })
+  return grandChildren;
+}
+
+function findParents(person, people){
+  let parents = people.filter(function(human){
+    return person.parents.includes(human.id);
+  })
+  return parents
+}
+
+function findSiblings(person, parents, people){
+  let siblings = [];
+  let foundSiblings = parents.map(function(parent){
+    let kids = findChildren(parent, people);
+    let spawn = kids.map(function(kid){
+      if(!siblings.includes(kid)){ siblings.push(kid);} 
+    })
+  })
+  siblings.pop(person);
+  return siblings; 
 }
 
 function findDescendants(person, people){
@@ -289,8 +326,17 @@ function displayDescendents(person, people){
   alert(person.firstName + " " + person.lastName + "'s Descendants: \n" + foundChildrenNames);
 }
 
+function findFamily(person, people){
+  let children = findChildren(person, people);
+  let grandChildren = findGrandchildren(children, people);
+  let parents = findParents(person, people);
+  let siblings = findSiblings(person,parents, people);
+  let spouse = findSpouse(person, people);
+}
 
-
+function displayFamily(person, people){
+  // TODO find a way to display a family member by cat.
+}
 //#endregion
 
 
