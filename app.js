@@ -14,13 +14,15 @@ function run(people){
   mainMenu(person, people);
 }
 
-function app(people){
-  let searchType = promptFor("Enter the attribute you would like to search by (name, eye color, height, weight, gender, occupation, relatives, DOB): ", validText).toLowerCase();
+function app(people, searchCat){
+  let searchType = searchCat;
   let searchResults;
   let personIndex;
   switch(searchType){
     case 'name':
-      searchResults = searchByName(people);
+      var firstName = document.getElementById("firstname").value;
+      var lastName = document.getElementById("lastname").value;
+      searchResults = searchByName(firstName, lastName, people);
       return searchResults;
     case 'eye color':
       searchResults = searchByEyeColor(people);
@@ -140,9 +142,9 @@ function mainMenu(person, people){
 //#region 
 
 //nearly finished function used to search through an array of people to find matching first and last name and return a SINGLE person object.
-function searchByName(people){
-  let firstName = promptFor("What is the person's first name?", validText);
-  let lastName = promptFor("What is the person's last name?", validText);
+function searchByName(firstName, lastName, people){
+  // let firstName = promptFor("What is the person's first name?", validText);
+  // let lastName = promptFor("What is the person's last name?", validText);
 
   let foundPerson = people.filter(function(potentialMatch){
     if(potentialMatch.firstName === firstName && potentialMatch.lastName === lastName){
