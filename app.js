@@ -318,24 +318,45 @@ function findDescendants(person, people){
   return foundDescendants;
 }
 
-function displayDescendents(person, people){
-  let foundChildren = findDescendants(person, people);
-  let foundChildrenNames = foundChildren.map(function(child){
-    return child.firstName + " " + child.lastName;
+function findNames(arrayOfPeople){
+  let namesFound = arrayOfPeople.map(function(person){
+    return person.firstName + " " + person.lastName;
   }).join("\n");
-  alert(person.firstName + " " + person.lastName + "'s Descendants: \n" + foundChildrenNames);
+  return namesFound;
 }
 
-function findFamily(person, people){
-  let children = findChildren(person, people);
-  let grandChildren = findGrandchildren(children, people);
-  let parents = findParents(person, people);
-  let siblings = findSiblings(person,parents, people);
-  let spouse = findSpouse(person, people);
+function displayDescendents(person, people){
+  let foundChildren = findNames(findDescendants(person, people));
+  if(foundChildren.length > 0){
+    alert(person.firstName + " " + person.lastName + "'s Descendants: \n" + foundChildren);
+  }
+  else{
+    alert(person.firstName + " " + person.lastName + " has no known decendants.");
+  }
+}
+
+function displayByCategory(category, itemToDisplay){
+  let labeledItems = "";  
+  if(itemToDisplay.length > 0){
+    labeledItems = `${category}: \n ${itemToDisplay}\n\n`; 
+  }
+  return labeledItems;
 }
 
 function displayFamily(person, people){
-  // TODO find a way to display a family member by cat.
+  let children = findChildren(person, people);
+  let grandChildren = displayByCategory('Grandchildren',findNames(findGrandchildren(children, people)));
+  let parents = findParents(person, people);
+  let siblings = displayByCategory('Siblings',findNames(findSiblings(person,parents, people)));
+  let spouse = displayByCategory('Spouse',findNames(findSpouse(person, people)));
+  children = displayByCategory('Children',findNames(children));
+  parents = displayByCategory('Parents',findNames(parents));
+  if(children > 0 || grandChildren > 0 || parents > 0 || siblings > 0 || spouse > 0){
+    alert(person.firstName + " " + person.lastName + "'s Family: \n\n" + spouse + parents + siblings + children + grandChildren);
+  }
+  else{
+    alert(person.firstName + " " + person.lastName + " has no known family.");
+  }
 }
 //#endregion
 
