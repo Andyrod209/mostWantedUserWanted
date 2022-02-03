@@ -7,16 +7,21 @@
 //#region 
 
 // app is the function called to start the entire application
+
+function run(people){
+  let person = app(people);
+  // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
+  mainMenu(person, people);
+}
+
 function app(people){
   let searchType = promptFor("Enter the attribute you would like to search by (name, eye color, height, weight, gender, occupation, relatives, DOB): ", validText).toLowerCase();
   let searchResults;
-  let person;
   let personIndex;
   switch(searchType){
     case 'name':
       searchResults = searchByName(people);
-      person = searchResults;
-      break;
+      return searchResults;
     case 'eye color':
       searchResults = searchByEyeColor(people);
       displayPeople(searchResults);
@@ -25,9 +30,8 @@ function app(people){
         app(searchResults);
       }
       else{
-        person = searchResults[personIndex]
+        return searchResults[personIndex];
       }
-      break;
     case 'height':
       searchResults = searchByHeight(people);
       displayPeople(searchResults);
@@ -36,9 +40,8 @@ function app(people){
         app(searchResults);
       }
       else{
-        person = searchResults[personIndex]
+        return searchResults[personIndex];
       }
-      break;
     case 'weight':
       searchResults = searchByWeight(people);
       displayPeople(searchResults);
@@ -47,9 +50,8 @@ function app(people){
         app(searchResults);
       }
       else{
-        person = searchResults[personIndex]
+        return searchResults[personIndex];
       }
-      break;
     case 'dob':
       searchResults = searchByDob(people);
       displayPeople(searchResults);
@@ -58,9 +60,8 @@ function app(people){
         app(searchResults);
       }
       else{
-        person = searchResults[personIndex]
+        return searchResults[personIndex];
       }
-      break;
     case 'occupation':
       searchResults = searchByOccupation(people);
       displayPeople(searchResults);
@@ -69,9 +70,8 @@ function app(people){
         app(searchResults);
       }
       else{
-        person = searchResults[personIndex]
+        return searchResults[personIndex];
       }
-      break;
     case 'gender':
       searchResults = searchByGender(people);
       displayPeople(searchResults);
@@ -80,7 +80,7 @@ function app(people){
         app(searchResults);
       }
       else{
-        person = searchResults[personIndex]
+        return searchResults[personIndex];
       }
       break;
     case 'relative':
@@ -91,17 +91,12 @@ function app(people){
         app(searchResults);
       }
       else{
-        person = searchResults[personIndex]
+        return searchResults[personIndex];
       }
-      break;
       default:
     app(people); // restart app
       break;
   }
-  
-  // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
-  
-  mainMenu(person, people);
 }
 
 // Menu function to call once you find who you are looking for
@@ -351,7 +346,7 @@ function displayFamily(person, people){
   let spouse = displayByCategory('Spouse',findNames(findSpouse(person, people)));
   children = displayByCategory('Children',findNames(children));
   parents = displayByCategory('Parents',findNames(parents));
-  if(children > 0 || grandChildren > 0 || parents > 0 || siblings > 0 || spouse > 0){
+  if(children.length > 0 || grandChildren.length > 0 || parents.length > 0 || siblings.length > 0 || spouse.length > 0){
     alert(person.firstName + " " + person.lastName + "'s Family: \n\n" + spouse + parents + siblings + children + grandChildren);
   }
   else{

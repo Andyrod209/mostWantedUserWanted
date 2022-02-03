@@ -26,9 +26,9 @@ program (display values for the various traits of the found person). -->
 <!-- (15 points): As a user, after locating a person, I want to see only that person’s descendants (display the 
 names of the descendants). -->
 
-(15 points): As a user, after locating a person, I want to see only that person’s immediate family 
+<!-- (15 points): As a user, after locating a person, I want to see only that person’s immediate family 
 members, displaying the names of the family members and their relation to the found person. 
-- i.e., parents, spouse, siblings
+- i.e., parents, spouse, siblings -->
 
 Bonus
 
