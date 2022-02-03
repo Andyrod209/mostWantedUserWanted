@@ -274,14 +274,39 @@ function findChildren(person, people){
 
 function findGrandchildren(children, people){
   let grandChildren = [];
-  let foundGrandChildren = children.map(function(child){
+  children.map(function(child){
     let foundKids = findChildren(child, people);
-      let foundKid = foundKids.map(function(kid){
+      foundKids.map(function(kid){
         grandChildren.push(kid);
       })
   })
   return grandChildren;
 }
+
+
+function findDescendants(person, people){
+  let foundChildren = people.filter(function(potentialMatch){
+    return potentialMatch.parents.includes(person.id);
+  })
+  foundChildren.map(function(child){
+    let descendant = findSpawn(child, people);
+    if(descendant.length > 0){foundChildren = foundChildren.concat(descendant)}
+  })
+    return foundChildren;
+}
+
+//Our findDescendants function prior to the recursion refactor: 
+
+// function findDescendants(person, people){
+//   let foundDescendants = findChildren(person, people);
+//   foundDescendants.map(function(child){
+//     let foundKids = findChildren(child, people);
+//       foundKids.map(function(kid){
+//         foundDescendants.push(kid);
+//       })
+//   })
+//   return foundDescendants;
+// }
 
 function findParents(person, people){
   let parents = people.filter(function(human){
@@ -290,11 +315,22 @@ function findParents(person, people){
   return parents
 }
 
+function findGrandparents(parents, people){
+  let grandparents = [];
+  parents.map(function(human){
+    let abuelos = findParents(human, people);
+      abuelos.map(function(person){
+        grandparents.push(person);
+      })
+  })
+  return grandparents;
+}
+
 function findSiblings(person, parents, people){
   let siblings = [];
-  let foundSiblings = parents.map(function(parent){
+  parents.map(function(parent){
     let kids = findChildren(parent, people);
-    let spawn = kids.map(function(kid){
+      kids.map(function(kid){
       if(!siblings.includes(kid)){ siblings.push(kid);} 
     })
   })
@@ -302,16 +338,6 @@ function findSiblings(person, parents, people){
   return siblings; 
 }
 
-function findDescendants(person, people){
-  let foundDescendants = findChildren(person, people);
-  let foundGrandChildren = foundDescendants.map(function(child){
-    let foundKids = findChildren(child, people);
-      let foundKid = foundKids.map(function(kid){
-        foundDescendants.push(kid);
-      })
-  })
-  return foundDescendants;
-}
 
 function findNames(arrayOfPeople){
   let namesFound = arrayOfPeople.map(function(person){
@@ -343,11 +369,12 @@ function displayFamily(person, people){
   let grandChildren = displayByCategory('Grandchildren',findNames(findGrandchildren(children, people)));
   let parents = findParents(person, people);
   let siblings = displayByCategory('Siblings',findNames(findSiblings(person,parents, people)));
+  let grandParents = displayByCategory('Grandparents',findNames(findGrandparents(parents, people)));
   let spouse = displayByCategory('Spouse',findNames(findSpouse(person, people)));
   children = displayByCategory('Children',findNames(children));
   parents = displayByCategory('Parents',findNames(parents));
-  if(children.length > 0 || grandChildren.length > 0 || parents.length > 0 || siblings.length > 0 || spouse.length > 0){
-    alert(person.firstName + " " + person.lastName + "'s Family: \n\n" + spouse + parents + siblings + children + grandChildren);
+  if(children.length > 0 || grandChildren.length > 0 || parents.length > 0 || siblings.length > 0 || spouse.length > 0 || grandParents.length > 0){
+    alert(person.firstName + " " + person.lastName + "'s Family: \n\n" + spouse + parents + siblings + children + grandChildren + grandParents);
   }
   else{
     alert(person.firstName + " " + person.lastName + " has no known family.");
