@@ -9,9 +9,11 @@
 // app is the function called to start the entire application
 
 function run(people){
-  let person = app(people, 'name');
-  // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
-  mainMenu(person, people);
+  let results = app(people, 'relative');
+  if(results.length <= 1){
+    mainMenu(results, people); //! FOR TOMORROW WHEN I WAKE UP AND SEE THIS: you may want to undo the most recent changes. I moved the mainMenu call and this if statement around between here and the displayPeople function, but that didn't resolve it. Still showing up as an object.
+  }
+  else{results = displayPeople(results);}
 }
 
 function app(people, searchCat){
@@ -19,70 +21,68 @@ function app(people, searchCat){
   let searchResults;
   let personIndex;
   switch(searchType){
+    case 'relative':
+      searchResults = searchByRelative(people);
+      if(searchResults.length > 0){
+        return app(searchResults, 'name');
+      }
+      else{
+        return app(people, 'name');
+      }
     case 'name':
       searchResults = searchByName(people);
       if(searchResults.length > 0){
-        app(searchResults, 'eye color');
+        return app(searchResults, 'eye color');
       }
       else{
-        app(people, 'eye color');
+        return app(people, 'eye color');
       }
     case 'eye color':
       searchResults = searchByEyeColor(people);
       if(searchResults.length > 0){
-        app(searchResults, 'height');
+        return app(searchResults, 'height');
       }
       else{
-        app(people, 'height');
+        return app(people, 'height');
       }
     case 'height':
       searchResults = searchByHeight(people);
       if(searchResults.length > 0){
-        app(searchResults, 'weight');
+        return app(searchResults, 'weight');
       }
       else{
-        app(people, 'weight');
+        return app(people, 'weight');
       }
     case 'weight':
       searchResults = searchByWeight(people);
       if(searchResults.length > 0){
-        app(searchResults, 'dob');
+        return app(searchResults, 'dob');
       }
       else{
-        app(people, 'dob');
+        return app(people, 'dob');
       }
     case 'dob':
       searchResults = searchByDob(people);
       if(searchResults.length > 0){
-        app(searchResults, 'occupation');
+        return app(searchResults, 'occupation');
       }
       else{
-        app(people, 'occupation');
+        return app(people, 'occupation');
       }
     case 'occupation':
       searchResults = searchByOccupation(people);
       if(searchResults.length > 0){
-        app(searchResults, 'gender');
+        return app(searchResults, 'gender');
       }
       else{
-        app(people, 'gender');
+        return app(people, 'gender');
       }
     case 'gender':
       searchResults = searchByGender(people);
       if(searchResults.length > 0){
-        app(searchResults, 'relative');
-      }
-      else{
-        app(people, 'relative');
-      }
-    case 'relative':
-      searchResults = searchByRelative(people);
-      if(searchResults.length > 0){
-        displayPeople(searchResults);
         return searchResults;
       }
       else{
-        displayPeople(people);
         return people;
       }
       default:
@@ -100,7 +100,7 @@ function mainMenu(person, people){
     alert("Could not find that individual.");
     return app(people); // restart
   }
-  
+
   let displayOption = promptFor("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", validText);
 
   switch(displayOption){
@@ -226,11 +226,13 @@ function searchByRelative(people){
   let foundRelative = people.filter(function(potentialMatch){
     return potentialMatch.firstName === relative[0] && potentialMatch.lastName === relative[1];
   })
-  let foundPeople = people.filter(function(potentialMatch){
-    return potentialMatch.currentSpouse == foundRelative.id || potentialMatch.parents.includes(foundRelative.id);
-  })
-
-  return foundPeople;
+  if(foundRelative.length > 0){
+    let foundPeople = people.filter(function(potentialMatch){
+      return potentialMatch.currentSpouse == foundRelative[0].id || potentialMatch.parents.includes(foundRelative[0].id);
+    })
+    return foundPeople;
+  }
+  else{return "";}
 }
 
 
@@ -246,8 +248,8 @@ function searchByRelative(people){
 // alerts a list of people
 function displayPeople(people){
   let listOfPeople = people.map(function(person){
-    return person.firstName + " " + person.lastName;
-  }).join("\n")+"\n";
+    return `<li class='list-group-item list-group-item-action' onclick='mainMenu(${person}, ${people})'>` + person.firstName + " " + person.lastName + "</li>"; //* Currently doesn't work b/c I tried to put an array in a string. Look into other ways to do this, browser tabs currently open may  help? Might need to change from list to "form" so we can take in input....
+  }).join();
   document.getElementById("results").innerHTML = listOfPeople;
 }
 
@@ -297,7 +299,7 @@ function findDescendants(person, people){
     return potentialMatch.parents.includes(person.id);
   })
   foundChildren.map(function(child){
-    let descendant = findSpawn(child, people);
+    let descendant = findDescendants(child, people);
     if(descendant.length > 0){foundChildren = foundChildren.concat(descendant)}
   })
     return foundChildren;
