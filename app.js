@@ -13,7 +13,7 @@ function run(people){
   if(results.length <= 1){
     mainMenu(results, people); //! FOR TOMORROW WHEN I WAKE UP AND SEE THIS: you may want to undo the most recent changes. I moved the mainMenu call and this if statement around between here and the displayPeople function, but that didn't resolve it. Still showing up as an object.
   }
-  else{results = displayPeople(results);}
+  else{results = displayPeople(results, people);}
 }
 
 function app(people, searchCat){
@@ -246,11 +246,14 @@ function searchByRelative(people){
 //#region 
 
 // alerts a list of people
-function displayPeople(people){
-  let listOfPeople = people.map(function(person){
-    return `<li class='list-group-item list-group-item-action' onclick='mainMenu(${person}, ${people})'>` + person.firstName + " " + person.lastName + "</li>"; //* Currently doesn't work b/c I tried to put an array in a string. Look into other ways to do this, browser tabs currently open may  help? Might need to change from list to "form" so we can take in input....
+function displayPeople(results, people){
+  let listOfPeople = results.map(function(person){
+    return `<li class='list-group-item list-group-item-action' id='${person.id}'>` + person.firstName + " " + person.lastName + "</li>"; 
   }).join();
   document.getElementById("results").innerHTML = listOfPeople;
+  results.map(function(person){
+    document.getElementById(`${person.id}`).onclick = function() {mainMenu(person, people)};
+  })
 }
 
 function displayPerson(person){
@@ -267,6 +270,7 @@ function displayPerson(person){
 
   document.getElementById("results").innerHTML = personInfo;
 }
+
 
 function findSpouse(person, people){
   let spouse = people.filter(function(individual){
