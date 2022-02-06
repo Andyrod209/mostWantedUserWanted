@@ -14,7 +14,7 @@ messages.
 
 <!-- (10 points): As a user, I want to be able to search for someone based on a single criterion
 - You should be able to find and return a list of people who match the search -->
-<!-- TODO ask megan if the way we have it is good, or if you need to be able to choose all the traits all at once-->
+
 <!-- (15 points): As a user, I want to be able to search for someone based on multiple traits (up to a 
 maximum of five criteria at once).
 - i.e., if you search for Gender: male and Eye Color: blue, you should get back a list of people who 
@@ -32,5 +32,16 @@ members, displaying the names of the family members and their relation to the fo
 
 Bonus
 
-As a user, after locating a person, I want to see only that person’s descendants (display the names of the 
-descendants), using recursion
+<!-- As a user, after locating a person, I want to see only that person’s descendants (display the names of the 
+descendants), using recursion -->
+
+
+
+My To-Do list:
+<!-- Get info/family/descendants buttons to work -->
+-change info/family/descendants info from alerts to printing on the page
+-add validation to input fields
+-change name search so you can search by first name or last name individually
+-Improve styling
+
+-mayyyybe build in back button to take you back to previous list (of displayPeople). so that if there's two billy bobs and you click on one and it's wrong, you can go back and click on the other one without having to start all over again

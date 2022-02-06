@@ -107,36 +107,34 @@ function mainMenu(person, people){
     <input type="button" class="btn btn-basic" id="family" value="Family">
     <input type="button" class="btn btn-basic" id="spawn" value="Descendants">
   </div>`
-  document.getElementById(`${person.id}`).onclick = function() {mainMenu(person, people)}; //! FIX THIS: THIS IS A WHOLE MESS, PLUS LINES 135-138. TRYING TO GET BUTTONS TO SET VALUE FOR DISPLAYOPTION. CONT. TOMORROW
-    let displayOption = promptFor("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", validText);
+  document.getElementById('info').onclick = function() {selectDisplayOption('info', person, people)};
+  document.getElementById('family').onclick = function() {selectDisplayOption('family', person, people)};
+  document.getElementById('spawn').onclick = function() {selectDisplayOption('descendants', person, people)};
   
-    switch(displayOption){
-      case "info":
-        displayPerson(person);
-      break;
-      case "family":
-        displayFamily(person, people);
-      // TODO: get person's family
-      break;
-      case "descendants":
-        displayDescendents(person, people);
-      break;
-      case "restart":
-      run(people); // restart
-      break;
-      case "quit":
-      return; // stop execution
-      default:
-      return mainMenu(person, people); // ask again
-    }
   }
 }
 
-function getDisplayOption(id){
-  var displayOption = document.getElementById(id).value;
-  return displayOption;
+function selectDisplayOption(displayOption, person, people){
+  switch(displayOption){
+    case "info":
+      displayPerson(person);
+    break;
+    case "family":
+      displayFamily(person, people);
+    // TODO: get person's family
+    break;
+    case "descendants":
+      displayDescendents(person, people);
+    break;
+    case "restart":
+    run(people); // restart
+    break;
+    case "quit":
+    return; // stop execution
+    default:
+    return mainMenu(person, people); // ask again
+  }
 }
-
 
 //#endregion
 
