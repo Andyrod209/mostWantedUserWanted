@@ -43,5 +43,6 @@ My To-Do list:
 -add validation to input fields
 -change name search so you can search by first name or last name individually
 -Improve styling
+<!-- -make it so you can click on a relative and be brought to their info -->
 
 -mayyyybe build in back button to take you back to previous list (of displayPeople). so that if there's two billy bobs and you click on one and it's wrong, you can go back and click on the other one without having to start all over again

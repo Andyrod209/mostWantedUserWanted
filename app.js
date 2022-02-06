@@ -102,10 +102,14 @@ function mainMenu(person, people){
   }
   else{
     document.getElementById("bottom").innerHTML = `<h3 class="text-center">${person.firstName} ${person.lastName}</h3> 
+    <div class="container mt-3 w-25">
+    <div class="col-md-12 text-center">
     <div class="btn-group">
-    <input type="button" class="btn btn-basic" id="info" value="Info">
-    <input type="button" class="btn btn-basic" id="family" value="Family">
-    <input type="button" class="btn btn-basic" id="spawn" value="Descendants">
+    <input type="button" class="btn btn-outline-light text-dark" id="info" value="Info">
+    <input type="button" class="btn btn-outline-light text-dark" id="family" value="Family">
+    <input type="button" class="btn btn-outline-light text-dark" id="spawn" value="Descendants">
+  </div>
+  </div>
   </div>`
   document.getElementById('info').onclick = function() {selectDisplayOption('info', person, people)};
   document.getElementById('family').onclick = function() {selectDisplayOption('family', person, people)};
@@ -120,7 +124,7 @@ function selectDisplayOption(displayOption, person, people){
       displayPerson(person);
     break;
     case "family":
-      displayFamily(person, people);
+      findFamily(person, people);
     // TODO: get person's family
     break;
     case "descendants":
@@ -289,17 +293,19 @@ function displayPeople(results, people){
 function displayPerson(person){
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
-  let personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += "Last Name: " + person.lastName + "\n";
-  personInfo += "DOB: " + person.dob + "\n";
-  personInfo += "Gender: " + person.gender + "\n";
-  personInfo += "Occupation: " + person.occupation + "\n";
-  personInfo += "Height: " + person.height + "\n";
-  personInfo += "Weight: " + person.weight + "\n";
-  personInfo += "Eye Color: " + person.eyeColor + "\n";
+  let personInfo = '<div class="container mt-3 mb-5 w-25"><table class="table ps-5"><tr><th>First Name:</th><td>' + person.firstName + '</td></tr>';
+  personInfo += "<tr><th>Last Name:</th><td>" + person.lastName + "</td></tr>";
+  personInfo += "<tr><th>DOB:</th><td>" + person.dob + "</td></tr>";
+  personInfo += "<tr><th>Gender:</th><td>" + person.gender + "</td></tr>";
+  personInfo += "<tr><th>Occupation:</th><td>" + person.occupation + "</td></tr>";
+  personInfo += "<tr><th>Height:</th><td>" + person.height + '"</td></tr>';
+  personInfo += "<tr><th>Weight:</th><td>" + person.weight + " lbs</td></tr>";
+  personInfo += "<tr><th>Eye Color:</th><td>" + person.eyeColor + "</td></tr></table></div>";
 
   document.getElementById("results").innerHTML = personInfo;
 }
+
+
 
 function clearContent(elementID){
   document.getElementById(elementID).innerHTML = ""
@@ -383,54 +389,80 @@ function findSiblings(person, parents, people){
   parents.map(function(parent){
     let kids = findChildren(parent, people);
       kids.map(function(kid){
-      if(!siblings.includes(kid)){ siblings.push(kid);} 
+      if(!siblings.includes(kid) && kid != person){ siblings.push(kid);} 
     })
   })
-  siblings.pop(person);
   return siblings; 
 }
 
 
-function findNames(arrayOfPeople){
-  let namesFound = arrayOfPeople.map(function(person){
-    return person.firstName + " " + person.lastName;
-  }).join("\n");
-  return namesFound;
-}
+// function findNames(arrayOfPeople){
+//   let namesFound = arrayOfPeople.map(function(person){
+//     return person.firstName + " " + person.lastName;
+//   }).join("\n");
+//   return namesFound;
+// }
 
 function displayDescendents(person, people){
-  let foundChildren = findNames(findDescendants(person, people));
+  let spawnTable = '<div class="container mt-3 w-50"><table class="table table-hover"><tbody>'
+  let foundChildren = findDescendants(person, people);
   if(foundChildren.length > 0){
-    alert(person.firstName + " " + person.lastName + "'s Descendants: \n" + foundChildren);
+    foundChildren.map(function(child){
+      spawnTable += `<tr id="${child.id}"><td>${child.firstName} ${child.lastName}</td></tr>`
+    })
   }
   else{
-    alert(person.firstName + " " + person.lastName + " has no known decendants.");
+    spawnTable = '<h5 class="text-center mt-5">' + person.firstName + " " + person.lastName + " has no known decendants.</h5>";
   }
+  document.getElementById("results").innerHTML = spawnTable;
+
+  foundChildren.map(function(child){
+    document.getElementById(`${child.id}`).onclick = function() {mainMenu(child, people)};
+  })
 }
 
-function displayByCategory(category, itemToDisplay){
+function displayByCategory(category, arrayOfPeople){
   let labeledItems = "";  
-  if(itemToDisplay.length > 0){
-    labeledItems = `${category}: \n ${itemToDisplay}\n\n`; 
+  if(arrayOfPeople.length > 0){
+    arrayOfPeople.map(function(person){
+      labeledItems += `<tr id="${person.id}"><td>${person.firstName} ${person.lastName}</td><td>${category}</td></tr>`; 
+    })
   }
   return labeledItems;
 }
 
-function displayFamily(person, people){
+function findFamily(person, people){
   let children = findChildren(person, people);
-  let grandChildren = displayByCategory('Grandchildren',findNames(findGrandchildren(children, people)));
+  let grandChildren = findGrandchildren(children, people);
   let parents = findParents(person, people);
-  let siblings = displayByCategory('Siblings',findNames(findSiblings(person,parents, people)));
-  let grandParents = displayByCategory('Grandparents',findNames(findGrandparents(parents, people)));
-  let spouse = displayByCategory('Spouse',findNames(findSpouse(person, people)));
-  children = displayByCategory('Children',findNames(children));
-  parents = displayByCategory('Parents',findNames(parents));
+  let siblings = findSiblings(person,parents, people);
+  let grandParents = findGrandparents(parents, people);
+  let spouse = findSpouse(person, people);
+  let family = children.concat(grandChildren, parents, siblings, grandParents, spouse);
+  return displayFamily(person, people, family, children, grandChildren, parents, siblings, grandParents, spouse);
+}
+
+function displayFamily(person, people, family, children, grandChildren, parents, siblings, grandParents, spouse){
+  let familyTable = '<div class="container mt-3 w-50"><table class="table table-hover"><thead><tr><th>Name</th><th>Relationship</th></tr></thead><tbody>'
+
+  grandChildren = displayByCategory('Grandchild', grandChildren);
+  siblings = displayByCategory('Sibling', siblings);
+  grandParents = displayByCategory('Grandparent', grandParents);
+  spouse = displayByCategory('Spouse', spouse);
+  children = displayByCategory('Child', children);
+  parents = displayByCategory('Parent', parents);
+
   if(children.length > 0 || grandChildren.length > 0 || parents.length > 0 || siblings.length > 0 || spouse.length > 0 || grandParents.length > 0){
-    alert(person.firstName + " " + person.lastName + "'s Family: \n\n" + spouse + parents + siblings + children + grandChildren + grandParents);
+    familyTable += spouse + parents + siblings + children + grandChildren + grandParents + "</tbody></table></div>";
   }
   else{
-    alert(person.firstName + " " + person.lastName + " has no known family.");
+    familyTable = '<p class="text-center">' + person.firstName + " " + person.lastName + " has no known family.</p>";
   }
+  document.getElementById("results").innerHTML = familyTable;
+
+  family.map(function(person){
+    document.getElementById(`${person.id}`).onclick = function() {mainMenu(person, people)};
+  })
 }
 //#endregion
 
