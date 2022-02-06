@@ -9,9 +9,11 @@
 // app is the function called to start the entire application
 
 function run(people){
+  clearContent("bottom");
+  clearContent("results");
   let results = app(people, 'relative');
   if(results.length <= 1){
-    mainMenu(results, people); //! FOR TOMORROW WHEN I WAKE UP AND SEE THIS: you may want to undo the most recent changes. I moved the mainMenu call and this if statement around between here and the displayPeople function, but that didn't resolve it. Still showing up as an object.
+    mainMenu(results[0], people); 
   }
   else{results = displayPeople(results, people);}
 }
@@ -19,71 +21,70 @@ function run(people){
 function app(people, searchCat){
   let searchType = searchCat;
   let searchResults;
-  let personIndex;
   switch(searchType){
     case 'relative':
       searchResults = searchByRelative(people);
-      if(searchResults.length > 0){
-        return app(searchResults, 'name');
+      if(searchResults == "empty"){
+        return app(people, 'name');
       }
       else{
-        return app(people, 'name');
+        return app(searchResults, 'name');
       }
     case 'name':
       searchResults = searchByName(people);
-      if(searchResults.length > 0){
-        return app(searchResults, 'eye color');
+      if(searchResults == "empty"){
+        return app(people, 'eye color');
       }
       else{
-        return app(people, 'eye color');
+        return app(searchResults, 'eye color');
       }
     case 'eye color':
       searchResults = searchByEyeColor(people);
-      if(searchResults.length > 0){
-        return app(searchResults, 'height');
+      if(searchResults == "empty"){
+        return app(people, 'height');
       }
       else{
-        return app(people, 'height');
+        return app(searchResults, 'height');
       }
     case 'height':
       searchResults = searchByHeight(people);
-      if(searchResults.length > 0){
-        return app(searchResults, 'weight');
+      if(searchResults == "empty"){
+        return app(people, 'weight');
       }
       else{
-        return app(people, 'weight');
+        return app(searchResults, 'weight');
       }
     case 'weight':
       searchResults = searchByWeight(people);
-      if(searchResults.length > 0){
-        return app(searchResults, 'dob');
+      if(searchResults == "empty"){
+        return app(people, 'dob');
       }
       else{
-        return app(people, 'dob');
+        return app(searchResults, 'dob');
       }
     case 'dob':
       searchResults = searchByDob(people);
-      if(searchResults.length > 0){
-        return app(searchResults, 'occupation');
+      if(searchResults == "empty"){
+        return app(people, 'occupation');
       }
       else{
-        return app(people, 'occupation');
+        return app(searchResults, 'occupation');
       }
     case 'occupation':
       searchResults = searchByOccupation(people);
-      if(searchResults.length > 0){
-        return app(searchResults, 'gender');
+      if(searchResults == "empty"){
+        return app(people, 'gender');
       }
       else{
-        return app(people, 'gender');
+        return app(searchResults, 'gender');
       }
     case 'gender':
       searchResults = searchByGender(people);
-      if(searchResults.length > 0){
-        return searchResults;
+      if(searchResults == "empty"){
+        return people;
       }
       else{
-        return people;
+        return searchResults;
       }
       default:
     app(people); // restart app
@@ -93,36 +94,49 @@ function app(people, searchCat){
 
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
-
+  clearContent("results");
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
   if(!person){
-    alert("Could not find that individual.");
-    return app(people); // restart
+    document.getElementById("bottom").innerHTML = "<h3>No results match search.</h3>"
   }
-
-  let displayOption = promptFor("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", validText);
-
-  switch(displayOption){
-    case "info":
-      displayPerson(person);
-    break;
-    case "family":
-      displayFamily(person, people);
-    // TODO: get person's family
-    break;
-    case "descendants":
-      displayDescendents(person, people);
-    break;
-    case "restart":
-    app(people); // restart
-    break;
-    case "quit":
-    return; // stop execution
-    default:
-    return mainMenu(person, people); // ask again
+  else{
+    document.getElementById("bottom").innerHTML = `<h3 class="text-center">${person.firstName} ${person.lastName}</h3> 
+    <div class="btn-group">
+    <input type="button" class="btn btn-basic" id="info" value="Info">
+    <input type="button" class="btn btn-basic" id="family" value="Family">
+    <input type="button" class="btn btn-basic" id="spawn" value="Descendants">
+  </div>`
+  document.getElementById(`${person.id}`).onclick = function() {mainMenu(person, people)}; //! FIX THIS: THIS IS A WHOLE MESS, PLUS LINES 135-138. TRYING TO GET BUTTONS TO SET VALUE FOR DISPLAYOPTION. CONT. TOMORROW
+    let displayOption = promptFor("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", validText);
+  
+    switch(displayOption){
+      case "info":
+        displayPerson(person);
+      break;
+      case "family":
+        displayFamily(person, people);
+      // TODO: get person's family
+      break;
+      case "descendants":
+        displayDescendents(person, people);
+      break;
+      case "restart":
+      run(people); // restart
+      break;
+      case "quit":
+      return; // stop execution
+      default:
+      return mainMenu(person, people); // ask again
+    }
   }
 }
+
+function getDisplayOption(id){
+  var displayOption = document.getElementById(id).value;
+  return displayOption;
+}
+
 
 //#endregion
 
@@ -137,6 +151,9 @@ function searchByName(people){
   // let lastName = promptFor("What is the person's last name?", validText);
   var firstName = document.getElementById("firstname").value;
   var lastName = document.getElementById("lastname").value;
+  if(firstName.length == 0 || lastName.length == 0){
+    return "empty";
+  }
   let foundPerson = people.filter(function(potentialMatch){
     if(potentialMatch.firstName === firstName && potentialMatch.lastName === lastName){
       return true;
@@ -154,7 +171,9 @@ function searchByName(people){
 function searchByEyeColor(people){
   // let eyeColor = promptFor("Enter eye color for search: ", validText);
   var eyeColor = document.getElementById("eyecolor").value;
-
+  if(eyeColor.length == 0){
+    return "empty";
+  }
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.eyeColor === eyeColor;
   })
@@ -164,7 +183,9 @@ function searchByEyeColor(people){
 function searchByHeight(people){
   // let height = promptFor("Enter height for search: ", validNum);
   var height = document.getElementById("height").value;
-
+  if(height.length == 0){
+    return "empty";
+  }
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.height == height;
   })
@@ -174,7 +195,9 @@ function searchByHeight(people){
 function searchByGender(people){
   // let gender = promptFor("Enter gender for search: ", validGender);
   var gender = document.getElementById("gender").value;
-
+  if(gender.length == 0){
+    return "empty";
+  }
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.gender === gender;
   })
@@ -184,7 +207,9 @@ function searchByGender(people){
 function searchByDob(people){
   // let dob = promptFor("Enter date of birth for search (mm/dd/yyyy): ", validDate);
   var dob = document.getElementById("dob").value;
-
+  if(dob.length == 0){
+    return "empty";
+  }
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.dob == dob;
   })
@@ -194,7 +219,9 @@ function searchByDob(people){
 function searchByWeight(people){
   // let weight = promptFor("Enter weight for search: ", validNum);
   var weight = document.getElementById("weight").value;
-
+  if(weight.length == 0){
+    return "empty";
+  }
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.weight == weight;
   })
@@ -204,7 +231,9 @@ function searchByWeight(people){
 function searchByOccupation(people){
   // let occupation = promptFor("Enter occupation for search: ", validText);
   var occupation = document.getElementById("job").value;
-
+  if(occupation.length == 0){
+    return "empty";
+  }
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.occupation === occupation;
   })
@@ -215,6 +244,9 @@ function searchByRelative(people){
   // let relativeFirstName = promptFor("Enter first name of relative for search: ", validText);
   // let relativeLastName = promptFor("Enter Last name of relative for search: ", validText);
   var relative = document.getElementById("relatives").value;
+  if(relative.length == 0){
+    return "empty";
+  }
   relative = relative.split(" ");
 
   // let foundRelative = people.filter(function(potentialMatch){
@@ -270,6 +302,14 @@ function displayPerson(person){
 
   document.getElementById("results").innerHTML = personInfo;
 }
+
+function clearContent(elementID){
+  document.getElementById(elementID).innerHTML = ""
+}
+
+
+
+
 
 
 function findSpouse(person, people){
