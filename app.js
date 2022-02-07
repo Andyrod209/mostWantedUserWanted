@@ -283,7 +283,7 @@ function searchByRelative(people){
 function displayPeople(results, people){
   let listOfPeople = results.map(function(person){
     return `<li class='list-group-item list-group-item-action' id='${person.id}'>` + person.firstName + " " + person.lastName + "</li>"; 
-  }).join();
+  }).join('');
   document.getElementById("results").innerHTML = listOfPeople;
   results.map(function(person){
     document.getElementById(`${person.id}`).onclick = function() {mainMenu(person, people)};

@@ -7,58 +7,65 @@
   integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
   
   </head>
-  <body>
+  <body class="bg-light">
+  <section class="bg-secondary">
+    <div class="d-flex justify-content-center align-items-center mb-3">
     <img class="img-fluid mx-auto" src="./images/FBI_seal.png" alt="FBI seal">
-    <h1 class="text-center">FBI Criminal Database</h1>
+    </div>
+    <h1 class="text-center pb-5 m-0 text-white">FBI Criminal Database</h1>
+    </section>
 
-    <section class="border mb-4 d-flex align-items-center flex-column bg-light">
+    <section class="mb-4 d-flex align-items-center flex-column bg-dark bg-gradient pt-2 pb-2">
       <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light px-5">
+      <nav class="navbar navbar-expand-lg px-5">
         <!-- Container wrapper -->
         <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggler" aria-controls="toggler" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
           <!-- Navbar brand -->
+          <div class="collapse navbar-collapse" id="toggler">  
+            <!-- Collapsible wrapper -->
           <form class="input-group needs-validation" novalidate>
             
             
-            <!-- Collapsible wrapper -->
-            
-            <!-- Search form -->
+          
             <div class="input-group">
               <div class="form-outline">
-                <input type="search" id="firstname" maxlength="1" class="form-control" placeholder="First name"/>
+                <input type="search" id="firstname" maxlength="100" class="form-control" placeholder="First name"/>
                 <div class="invalid-feedback">Input exceeds character limit.</div>
               </div>
             </div>
           </div>
-          <div class="input-group">
+          <div class="input-group px-2">
             <div class="form-outline">
               <input type="search" id="lastname" class="form-control" placeholder="Last name"/>
             </div>
           </div>
-          <div class="input-group">
+          <div class="input-group px-2">
             <div class="form-outline">
               <input type="text" id="job" class="form-control" placeholder="Occupation"/>
             </div>
           </div>
-          <div class="input-group">
+          <div class="input-group px-2">
             <div class="form-outline">
               <input type="search" id="relatives" class="form-control" placeholder="Known relatives"/>
             </div>
           </div>
-          <div class="input-group">
+          <div class="input-group px-2">
             <div class="form-outline">
               <input type="number" id="height" class="form-control" placeholder="Height">
               <div class="invalid-feedback">Please enter a valid number.</div>
             </div>
           </div>
-          <div class="input-group">
+          <div class="input-group px-2">
             <div class="form-outline">
               <input type="number" id="weight" class="form-control" placeholder="Weight"/>
               <div class="invalid-feedback">Please enter a valid number.</div>
             </div>
           </div>
         </div>
-        <div class="navbar-collapse">
+        <div class="input-group px-2">
         <select class="form-select my-1 mr-sm-2" id="eyecolor">
           <option selected value="">Eye Color</option>
           <option value="brown">Brown</option>
@@ -67,30 +74,39 @@
           <option value="green">Green</option>
           <option value="hazel">Hazel</option>
         </select>
+      </div>
+        <div class="input-group px-2">
         <select class="form-select my-1 mr-sm-2" id="gender">
           <option selected value="">Gender</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
           <option value="other">Other</option>
         </select>
+      </div>
+      <div class="input-group px-2">
         <label for "date" class="form-label col-form-label-lg"></label>
-        <input type="date" name="date" id="dob" class="form-control form-control-lg">
+        <input type="text" placeholder="Date of Birth " name="date" id="dob" class="form-control rounded" onblur="(this.type='text')" onfocus="(this.type='date')" >
         <div class="invalid-feedback">Please enter a valid date.</div>
       </div>
-        <input type="submit" class="btn btn-primary mb-2" value="Search">
+      <div class="input-group px-2">
+        <input type="submit" class="btn btn-warning" value="Search">
+      </div>
             </div>
-          </form>
+          </form> 
           <!-- Collapsible wrapper -->
         </div>
+      </div>
         <!-- Container wrapper -->
       </nav>
       <!-- Navbar -->
     </section>
-    <section>
+    <section class="bg-light">
       <div id="bottom">
       </div>
-      <ul class="list-group list-group-flush" id="results">
+      <div class="d-flex justify-content-center align-items-center">
+      <ul class="list-group px-5 w-50" id="results">
       </ul>
+      </div>
     </section>
 
 
