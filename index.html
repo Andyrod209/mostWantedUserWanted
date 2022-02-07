@@ -17,34 +17,33 @@
 
     <section class="mb-4 d-flex align-items-center flex-column bg-dark bg-gradient pt-2 pb-2">
       <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg px-5">
+      <nav class="navbar navbar-expand-lg navbar-dark">
         <!-- Container wrapper -->
         <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggler" aria-controls="toggler" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggler" aria-controls="toggler" aria-expanded="false" aria-label="Toggle navigation" onclick="mobileWidth('form-control')">
+            <span class="navbar-toggler-icon" name="toggler-icon"></span>
           </button>
           <!-- Navbar brand -->
           <div class="collapse navbar-collapse" id="toggler">  
             <!-- Collapsible wrapper -->
-          <form class="input-group needs-validation" novalidate>
+          <form class="needs-validation" novalidate>
             
-            
+            <div class="d-flex align-items-center">
           
-            <div class="input-group">
+            <div class="input-group px-2">
               <div class="form-outline">
                 <input type="search" id="firstname" maxlength="100" class="form-control" placeholder="First name"/>
-                <div class="invalid-feedback">Input exceeds character limit.</div>
               </div>
             </div>
-          </div>
+      
           <div class="input-group px-2">
             <div class="form-outline">
-              <input type="search" id="lastname" class="form-control" placeholder="Last name"/>
+              <input type="search" id="lastname" maxlength="100" class="form-control" placeholder="Last name"/>
             </div>
           </div>
           <div class="input-group px-2">
             <div class="form-outline">
-              <input type="text" id="job" class="form-control" placeholder="Occupation"/>
+              <input type="text" id="job" maxlength="100" class="form-control" placeholder="Occupation"/>
             </div>
           </div>
           <div class="input-group px-2">
@@ -64,7 +63,6 @@
               <div class="invalid-feedback">Please enter a valid number.</div>
             </div>
           </div>
-        </div>
         <div class="input-group px-2">
         <select class="form-select my-1 mr-sm-2" id="eyecolor">
           <option selected value="">Eye Color</option>
@@ -91,7 +89,7 @@
       <div class="input-group px-2">
         <input type="submit" class="btn btn-warning" value="Search">
       </div>
-            </div>
+    </div>
           </form> 
           <!-- Collapsible wrapper -->
         </div>
@@ -111,20 +109,22 @@
 
 
 
-    <!-- <script>
-      function validate(){
-        const inpObj = document.getElementById("id1");
-  if (!inpObj.checkValidity()) {
-    document.getElementById("demo").innerHTML = inpObj.validationMessage;
-  }
-  form.classList.add('was-validated');
-      }
-    </script> -->
+  
 
 
 
     <script>
       dob.max = new Date().toISOString().split("T")[0];
+
+      function mobileWidth(className){
+        inputs = document.getElementsByClassName(className);
+        for(let i = 1; i < inputs.length; i++){
+          inputs[i].classList.add("w-100")
+        }
+      }
+
+
+
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       (function() {
         'use strict';
