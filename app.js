@@ -293,13 +293,13 @@ function displayPeople(results, people){
 function displayPerson(person){
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
-  let personInfo = '<div class="container mt-3 mb-5 w-25"><table class="table ps-5"><tr><th>First Name:</th><td>' + person.firstName + '</td></tr>';
+  let personInfo = '<div class="container mt-3 mb-5 w-25 text-capitalize"><table class="table ps-5"><tr><th>First Name:</th><td>' + person.firstName + '</td></tr>';
   personInfo += "<tr><th>Last Name:</th><td>" + person.lastName + "</td></tr>";
   personInfo += "<tr><th>DOB:</th><td>" + person.dob + "</td></tr>";
   personInfo += "<tr><th>Gender:</th><td>" + person.gender + "</td></tr>";
   personInfo += "<tr><th>Occupation:</th><td>" + person.occupation + "</td></tr>";
   personInfo += "<tr><th>Height:</th><td>" + person.height + '"</td></tr>';
-  personInfo += "<tr><th>Weight:</th><td>" + person.weight + " lbs</td></tr>";
+  personInfo += "<tr><th>Weight:</th><td class='text-lowercase'>" + person.weight + " lbs</td></tr>";
   personInfo += "<tr><th>Eye Color:</th><td>" + person.eyeColor + "</td></tr></table></div>";
 
   document.getElementById("results").innerHTML = personInfo;
@@ -404,7 +404,7 @@ function findSiblings(person, parents, people){
 // }
 
 function displayDescendents(person, people){
-  let spawnTable = '<div class="container mt-3 w-50"><table class="table table-hover"><tbody>'
+  let spawnTable = '<div class="container mt-3 w-25"><table class="table table-hover"><tbody>'
   let foundChildren = findDescendants(person, people);
   if(foundChildren.length > 0){
     foundChildren.map(function(child){
@@ -412,7 +412,7 @@ function displayDescendents(person, people){
     })
   }
   else{
-    spawnTable = '<h5 class="text-center mt-5">' + person.firstName + " " + person.lastName + " has no known decendants.</h5>";
+    spawnTable = '<p class="text-center fs-5 mt-5">' + person.firstName + " " + person.lastName + " has no known decendants.</p>";
   }
   document.getElementById("results").innerHTML = spawnTable;
 
@@ -456,7 +456,7 @@ function displayFamily(person, people, family, children, grandChildren, parents,
     familyTable += spouse + parents + siblings + children + grandChildren + grandParents + "</tbody></table></div>";
   }
   else{
-    familyTable = '<p class="text-center">' + person.firstName + " " + person.lastName + " has no known family.</p>";
+    familyTable = '<p class="text-center fs-5 mt-5">' + person.firstName + " " + person.lastName + " has no known family.</p>";
   }
   document.getElementById("results").innerHTML = familyTable;
 
@@ -496,14 +496,21 @@ function yesNo(input){
   }
 }
 
-function validNum(input){
-  if(isNaN(input)){
-    return false;
+function masterValidator(){
+  var height = document.getElementById("height").value;
+  validNum(height, 'height')
+}
+
+function validNum(input, id){
+  if(input.length > 0 && isNaN(input)){
+    document.getElementById(id + "-valid").innerHTML = 'Please enter a valid number.';
   }
   else{
     return true;
   }
 }
+
+
 
 function validGender(input){
   if(input.toLowerCase() == "female" || input.toLowerCase() == "male"){

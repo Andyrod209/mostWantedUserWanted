@@ -39,7 +39,7 @@ descendants), using recursion -->
 
 My To-Do list:
 <!-- Get info/family/descendants buttons to work -->
--change info/family/descendants info from alerts to printing on the page
+<!-- -change info/family/descendants info from alerts to printing on the page -->
 -add validation to input fields
 -change name search so you can search by first name or last name individually
 -Improve styling

@@ -11,68 +11,75 @@
     <img class="img-fluid mx-auto" src="./images/FBI_seal.png" alt="FBI seal">
     <h1 class="text-center">FBI Criminal Database</h1>
 
-    <section class="border p-4 mb-4 d-flex align-items-center flex-column">
+    <section class="border mb-4 d-flex align-items-center flex-column bg-light">
       <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light px-5">
         <!-- Container wrapper -->
         <div class="container-fluid">
           <!-- Navbar brand -->
-          <form class="input-group">
-            <select class="form-select my-1 mr-sm-2" id="eyecolor">
-              <option selected value="">Eye Color</option>
-              <option value="brown">Brown</option>
-              <option value="black">Black</option>
-              <option value="blue">Blue</option>
-              <option value="green">Green</option>
-              <option value="hazel">Hazel</option>
-            </select>
-            <select class="form-select my-1 mr-sm-2" id="gender">
-              <option selected value="">Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-            <label for "date" class="form-label col-form-label-lg">Date of Birth:</label>
-            <input type="date" name="date" id="dob" class="form-control form-control-lg">
-
-    
-          <!-- Collapsible wrapper -->
-          <div class="navbar-collapse">
-    
+          <form class="input-group needs-validation" novalidate>
+            
+            
+            <!-- Collapsible wrapper -->
+            
             <!-- Search form -->
             <div class="input-group">
               <div class="form-outline">
-                <input type="search" id="firstname" class="form-control" placeholder="First name"/>
+                <input type="search" id="firstname" maxlength="1" class="form-control" placeholder="First name"/>
+                <div class="invalid-feedback">Input exceeds character limit.</div>
               </div>
             </div>
-            <div class="input-group">
-              <div class="form-outline">
-                <input type="search" id="lastname" class="form-control" placeholder="Last name"/>
-              </div>
-            </div>
-            <div class="input-group">
-              <div class="form-outline">
-                <input type="search" id="job" class="form-control" placeholder="Occupation"/>
-              </div>
-            </div>
-            <div class="input-group">
-              <div class="form-outline">
-                <input type="search" id="relatives" class="form-control" placeholder="Known relatives"/>
-              </div>
-            </div>
-            <div class="input-group">
-              <div class="form-outline">
-                <input type="search" id="height" class="form-control" placeholder="Height"/>
-              </div>
-            </div>
-            <div class="input-group">
-              <div class="form-outline">
-                <input type="search" id="weight" class="form-control" placeholder="Weight"/>
-              </div>
-            </div>
-            <input type="submit" class="btn btn-primary mb-2" value="Search" onclick="run(data)">
           </div>
-        </form>
+          <div class="input-group">
+            <div class="form-outline">
+              <input type="search" id="lastname" class="form-control" placeholder="Last name"/>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="form-outline">
+              <input type="text" id="job" class="form-control" placeholder="Occupation"/>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="form-outline">
+              <input type="search" id="relatives" class="form-control" placeholder="Known relatives"/>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="form-outline">
+              <input type="number" id="height" class="form-control" placeholder="Height">
+              <div class="invalid-feedback">Please enter a valid number.</div>
+            </div>
+          </div>
+          <div class="input-group">
+            <div class="form-outline">
+              <input type="number" id="weight" class="form-control" placeholder="Weight"/>
+              <div class="invalid-feedback">Please enter a valid number.</div>
+            </div>
+          </div>
+        </div>
+        <div class="navbar-collapse">
+        <select class="form-select my-1 mr-sm-2" id="eyecolor">
+          <option selected value="">Eye Color</option>
+          <option value="brown">Brown</option>
+          <option value="black">Black</option>
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="hazel">Hazel</option>
+        </select>
+        <select class="form-select my-1 mr-sm-2" id="gender">
+          <option selected value="">Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        <label for "date" class="form-label col-form-label-lg"></label>
+        <input type="date" name="date" id="dob" class="form-control form-control-lg">
+        <div class="invalid-feedback">Please enter a valid date.</div>
+      </div>
+        <input type="submit" class="btn btn-primary mb-2" value="Search">
+            </div>
+          </form>
           <!-- Collapsible wrapper -->
         </div>
         <!-- Container wrapper -->
@@ -85,6 +92,45 @@
       <ul class="list-group list-group-flush" id="results">
       </ul>
     </section>
+
+
+
+    <!-- <script>
+      function validate(){
+        const inpObj = document.getElementById("id1");
+  if (!inpObj.checkValidity()) {
+    document.getElementById("demo").innerHTML = inpObj.validationMessage;
+  }
+  form.classList.add('was-validated');
+      }
+    </script> -->
+
+
+
+    <script>
+      dob.max = new Date().toISOString().split("T")[0];
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              else{return run(data)}
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+      </script>
+
+
 
     <script src="data.js"></script>
     <script src="app.js"></script>
