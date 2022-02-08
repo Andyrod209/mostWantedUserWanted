@@ -11,11 +11,13 @@
 function run(people){
   clearContent("bottom");
   clearContent("results");
-  let results = app(people, 'relative');
-  if(results.length <= 1){
-    mainMenu(results[0], people); 
-  }
-  else{results = displayPeople(results, people);}
+  if(checkForInput()){
+    let results = app(people, 'relative');
+    if(results.length <= 1){
+      mainMenu(results[0], people); 
+    }
+    else{results = displayPeople(results, people);}
+}
 }
 
 function app(people, searchCat){
@@ -25,13 +27,21 @@ function app(people, searchCat){
     case 'relative':
       searchResults = searchByRelative(people);
       if(searchResults == "empty"){
-        return app(people, 'name');
+        return app(people, 'first name');
       }
       else{
-        return app(searchResults, 'name');
+        return app(searchResults, 'first name');
       }
-    case 'name':
-      searchResults = searchByName(people);
+    case 'first name':
+      searchResults = searchByFirstName(people);
+      if(searchResults == "empty"){
+        return app(people, 'last name');
+      }
+      else{
+        return app(searchResults, 'last name');
+      }
+    case 'last name':
+      searchResults = searchByLastName(people);
       if(searchResults == "empty"){
         return app(people, 'eye color');
       }
@@ -98,7 +108,7 @@ function mainMenu(person, people){
   /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
 
   if(!person){
-    document.getElementById("bottom").innerHTML = "<h3>No results match search.</h3>"
+    document.getElementById("bottom").innerHTML = "<h3 class='text-center'>No results match search.</h3>"
   }
   else{
     document.getElementById("bottom").innerHTML = `<h3 class="text-center">${person.firstName} ${person.lastName}</h3> 
@@ -147,31 +157,32 @@ function selectDisplayOption(displayOption, person, people){
 /////////////////////////////////////////////////////////////////
 //#region 
 
-//nearly finished function used to search through an array of people to find matching first and last name and return a SINGLE person object.
-function searchByName(people){
-  // let firstName = promptFor("What is the person's first name?", validText);
-  // let lastName = promptFor("What is the person's last name?", validText);
+
+function searchByFirstName(people){
   var firstName = document.getElementById("firstname").value;
-  var lastName = document.getElementById("lastname").value;
-  if(firstName.length == 0 || lastName.length == 0){
+  if(firstName.length == 0){
     return "empty";
   }
   let foundPerson = people.filter(function(potentialMatch){
-    if(potentialMatch.firstName === firstName && potentialMatch.lastName === lastName){
-      return true;
-    }
-    else{
-      return false;
-    }
+    return potentialMatch.firstName.toLowerCase() === firstName.toLowerCase();
   })
-
-  // TODO: find the person single person object using the name they entered.
   return foundPerson;
 }
 
-//unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
+function searchByLastName(people){
+  var lastName = document.getElementById("lastname").value;
+  if(lastName.length == 0){
+    return "empty";
+  }
+  let foundPerson = people.filter(function(potentialMatch){
+    return potentialMatch.lastName.toLowerCase() === lastName.toLowerCase();
+  })
+  return foundPerson;
+}
+
+
 function searchByEyeColor(people){
-  // let eyeColor = promptFor("Enter eye color for search: ", validText);
+
   var eyeColor = document.getElementById("eyecolor").value;
   if(eyeColor.length == 0){
     return "empty";
@@ -183,7 +194,7 @@ function searchByEyeColor(people){
 }
 
 function searchByHeight(people){
-  // let height = promptFor("Enter height for search: ", validNum);
+
   var height = document.getElementById("height").value;
   if(height.length == 0){
     return "empty";
@@ -195,7 +206,7 @@ function searchByHeight(people){
 }
 
 function searchByGender(people){
-  // let gender = promptFor("Enter gender for search: ", validGender);
+
   var gender = document.getElementById("gender").value;
   if(gender.length == 0){
     return "empty";
@@ -207,11 +218,13 @@ function searchByGender(people){
 }
 
 function searchByDob(people){
-  // let dob = promptFor("Enter date of birth for search (mm/dd/yyyy): ", validDate);
+
   var dob = document.getElementById("dob").value;
   if(dob.length == 0){
     return "empty";
   }
+  dob = dob.split('-');
+  dob = dob[1] + "/" + dob[2] + "/" + dob[0];
   let foundPeople = people.filter(function(potentialMatch){
     return potentialMatch.dob == dob;
   })
@@ -219,7 +232,7 @@ function searchByDob(people){
 }
 
 function searchByWeight(people){
-  // let weight = promptFor("Enter weight for search: ", validNum);
+
   var weight = document.getElementById("weight").value;
   if(weight.length == 0){
     return "empty";
@@ -231,40 +244,33 @@ function searchByWeight(people){
 }
 
 function searchByOccupation(people){
-  // let occupation = promptFor("Enter occupation for search: ", validText);
+
   var occupation = document.getElementById("job").value;
   if(occupation.length == 0){
     return "empty";
   }
   let foundPeople = people.filter(function(potentialMatch){
-    return potentialMatch.occupation === occupation;
+    return potentialMatch.occupation.toLowerCase() === occupation.toLowerCase();
   })
   return foundPeople;
 }
 
 function searchByRelative(people){
-  // let relativeFirstName = promptFor("Enter first name of relative for search: ", validText);
-  // let relativeLastName = promptFor("Enter Last name of relative for search: ", validText);
   var relative = document.getElementById("relatives").value;
+  let knownRelatives = []
   if(relative.length == 0){
     return "empty";
   }
-  relative = relative.split(" ");
+  relative = relative.toLowerCase().split(" ");
 
-  // let foundRelative = people.filter(function(potentialMatch){
-  //   return potentialMatch.firstName === relativeFirstName && potentialMatch.lastName === relativeLastName;
-  // })
-  // let foundPeople = people.filter(function(potentialMatch){
-  //   return potentialMatch.currentSpouse == foundRelative.id || potentialMatch.parents.includes(foundRelative.id);
-  // })
   let foundRelative = people.filter(function(potentialMatch){
-    return potentialMatch.firstName === relative[0] && potentialMatch.lastName === relative[1];
+    return potentialMatch.firstName.toLowerCase() === relative[0] && potentialMatch.lastName.toLowerCase() === relative[1];
   })
   if(foundRelative.length > 0){
-    let foundPeople = people.filter(function(potentialMatch){
-      return potentialMatch.currentSpouse == foundRelative[0].id || potentialMatch.parents.includes(foundRelative[0].id);
+    foundRelative.map(function(relative){
+      knownRelatives = knownRelatives.concat(findFamily(relative, people, false));
     })
-    return foundPeople;
+    return knownRelatives;
   }
   else{return "";}
 }
@@ -293,7 +299,7 @@ function displayPeople(results, people){
 function displayPerson(person){
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
-  let personInfo = '<div class="container mt-3 mb-5 w-25 text-capitalize"><table class="table ps-5"><tr><th>First Name:</th><td>' + person.firstName + '</td></tr>';
+  let personInfo = '<div class="container mt-3 mb-5 w-50 text-capitalize"><table class="table ps-5"><tr><th>First Name:</th><td>' + person.firstName + '</td></tr>';
   personInfo += "<tr><th>Last Name:</th><td>" + person.lastName + "</td></tr>";
   personInfo += "<tr><th>DOB:</th><td>" + person.dob + "</td></tr>";
   personInfo += "<tr><th>Gender:</th><td>" + person.gender + "</td></tr>";
@@ -404,7 +410,7 @@ function findSiblings(person, parents, people){
 // }
 
 function displayDescendents(person, people){
-  let spawnTable = '<div class="container mt-3 w-25"><table class="table table-hover"><tbody>'
+  let spawnTable = '<div class="container mt-3 w-50"><table class="table table-hover"><tbody>'
   let foundChildren = findDescendants(person, people);
   if(foundChildren.length > 0){
     foundChildren.map(function(child){
@@ -431,7 +437,7 @@ function displayByCategory(category, arrayOfPeople){
   return labeledItems;
 }
 
-function findFamily(person, people){
+function findFamily(person, people, bool=true){
   let children = findChildren(person, people);
   let grandChildren = findGrandchildren(children, people);
   let parents = findParents(person, people);
@@ -439,7 +445,12 @@ function findFamily(person, people){
   let grandParents = findGrandparents(parents, people);
   let spouse = findSpouse(person, people);
   let family = children.concat(grandChildren, parents, siblings, grandParents, spouse);
-  return displayFamily(person, people, family, children, grandChildren, parents, siblings, grandParents, spouse);
+  if(bool){
+    return displayFamily(person, people, family, children, grandChildren, parents, siblings, grandParents, spouse);
+  }
+  else{
+    return family;
+  }
 }
 
 function displayFamily(person, people, family, children, grandChildren, parents, siblings, grandParents, spouse){
@@ -496,9 +507,23 @@ function yesNo(input){
   }
 }
 
-function masterValidator(){
-  var height = document.getElementById("height").value;
-  validNum(height, 'height')
+function checkForInput(){
+  let inputValues = []
+  inputValues.push(document.getElementById("height").value);
+  inputValues.push(document.getElementById("weight").value);
+  inputValues.push(document.getElementById("firstname").value);
+  inputValues.push(document.getElementById("lastname").value);
+  inputValues.push(document.getElementById("relatives").value);
+  inputValues.push(document.getElementById("dob").value);
+  inputValues.push(document.getElementById("job").value);
+  inputValues.push(document.getElementById("gender").value);
+  inputValues.push(document.getElementById("eyecolor").value);
+  inputValues = inputValues.join('');
+
+  if(inputValues.length == 0){
+    return false;
+  }
+  else{return true;}
 }
 
 function validNum(input, id){

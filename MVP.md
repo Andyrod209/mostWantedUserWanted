@@ -40,9 +40,13 @@ descendants), using recursion -->
 My To-Do list:
 <!-- Get info/family/descendants buttons to work -->
 <!-- -change info/family/descendants info from alerts to printing on the page -->
--add validation to input fields
--change name search so you can search by first name or last name individually
+<!-- -add validation to input fields
+-change name search so you can search by first name or last name individually -->
 -Improve styling
+<!-- -fix bug: prints all names when no search terms set -->
+-fix flex-box 
+-style validation?
+-fix refresh issue
 <!-- -make it so you can click on a relative and be brought to their info -->
 
 -mayyyybe build in back button to take you back to previous list (of displayPeople). so that if there's two billy bobs and you click on one and it's wrong, you can go back and click on the other one without having to start all over again
